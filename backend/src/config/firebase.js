@@ -1,1 +1,18 @@
-﻿// Firebase Admin SDK init
+﻿import admin from "firebase-admin";
+import "dotenv/config";
+
+// ── Khởi tạo Firebase Admin (chỉ 1 lần) ──────────────────────
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      // Thay \n literal thành newline thật (Railway/Supabase lưu dạng escaped)
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    }),
+  });
+}
+
+export const auth = admin.auth();
+export const messaging = admin.messaging();
+export default admin;
